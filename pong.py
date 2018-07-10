@@ -22,6 +22,7 @@ def game():
     paddle_y_bottom = 260
     
     def paddle_1():
+
         pygame.draw.line(screen, (0,255, 0), [paddle_x, paddle_y_top], [paddle_x, paddle_y_bottom], 10)
 
     tipoff = random.randint(1, 6)
@@ -53,6 +54,15 @@ def game():
         pygame.display.update()
         clock.tick(60)
 
+
+        pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_UP]:
+            paddle_y_top -= 10
+            paddle_y_bottom -= 10
+        if pressed[pygame.K_DOWN]:
+            paddle_y_top += 10
+            paddle_y_bottom += 10
+        
         ball_x += ball_mvmnt_x
         ball_y += ball_mvmnt_y
 
