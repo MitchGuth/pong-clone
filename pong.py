@@ -67,19 +67,25 @@ def game():
         
         ball_x += ball_mvmnt_x
         ball_y += ball_mvmnt_y
+        paddle_top = range(paddle_y_top, paddle_y_top + 30)
+        paddle_bottom = range(paddle_y_bottom, paddle_y_bottom - 30)
 
         if ball_x + ball_radius > arena_width:
             ball_mvmnt_x = -ball_mvmnt_x
         if ball_y + ball_radius > arena_height:
             ball_mvmnt_y = -ball_mvmnt_y
-        if ball_x == paddle_x and ball_y - ball_radius>= paddle_y_top and ball_y - ball_radius <= paddle_y_bottom :
+        if ball_x == paddle_x and ball_y >= paddle_y_top and ball_y <= paddle_y_bottom :
             ball_mvmnt_x = -ball_mvmnt_x 
         if ball_y - ball_radius < 0:
             ball_mvmnt_y = -ball_mvmnt_y
         if ball_x - ball_radius < 0: 
             if  ball_y <= paddle_y_bottom and ball_y >= paddle_y_top:
-                ball_mvmnt_x = -ball_mvmnt_x
-            #define middle and then adjust y mvmnt based on middle  
+                if ball_y not in paddle_top and ball_y not in paddle_bottom:
+                    ball_mvmnt_y += random.randint(1, 7)
+                    ball_mvmnt_x = -ball_mvmnt_x
+                else:
+                    ball_mvmnt_x = -ball_mvmnt_x
+            #define middle and then adjust y mvmnt based on middle of paddle
             else:
                 you_lose()
                 break
@@ -87,3 +93,6 @@ def game():
 pygame.quit()
 
 game()
+
+# need to create if/else logic to apply the paddle top and bottom 
+# so that I can change the trejectory of a ball that is straight east west moving.
