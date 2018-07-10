@@ -1,6 +1,9 @@
 import pygame
 import random
 
+def you_lose():
+    print "You have lost the game, good luck next time. "
+
 def game():
     arena_width = 800
     arena_height = 600
@@ -15,6 +18,9 @@ def game():
     ball_radius = 20
     ball_mvmnt_x = 0
     ball_mvmnt_y = 0
+    paddle_x = 1
+    paddle_y_top = 260
+    paddle_y_bottom = 340
 
     tipoff = random.randint(1, 6)
     if tipoff == 1:
@@ -41,6 +47,7 @@ def game():
 
         screen.fill((0, 0, 0))
         pygame.draw.circle(screen, (255, 0, 0), (ball_x, ball_y), ball_radius, 0)
+        pygame.draw.line(screen, (0,255, 0), [paddle_x, paddle_y_top], [paddle_x, paddle_y_bottom], 10)
         pygame.display.update()
         clock.tick(60)
 
@@ -51,7 +58,8 @@ def game():
         if ball_y + ball_radius > arena_height:
             ball_mvmnt_y = -ball_mvmnt_y
         if ball_x - ball_radius < 0:
-            ball_mvmnt_x = -ball_mvmnt_x
+            you_lose()
+            break
         if ball_y - ball_radius < 0:
             ball_mvmnt_y = -ball_mvmnt_y
         
