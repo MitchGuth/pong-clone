@@ -10,7 +10,6 @@ def game():
     pygame.init()
     screen = pygame.display.set_mode((800,600))
     done = False
-
     clock = pygame.time.Clock()
 
     ball_x = 400
@@ -19,8 +18,11 @@ def game():
     ball_mvmnt_x = 0
     ball_mvmnt_y = 0
     paddle_x = 1
-    paddle_y_top = 260
-    paddle_y_bottom = 340
+    paddle_y_top = 340
+    paddle_y_bottom = 260
+    
+    def paddle_1():
+        pygame.draw.line(screen, (0,255, 0), [paddle_x, paddle_y_top], [paddle_x, paddle_y_bottom], 10)
 
     tipoff = random.randint(1, 6)
     if tipoff == 1:
@@ -47,21 +49,33 @@ def game():
 
         screen.fill((0, 0, 0))
         pygame.draw.circle(screen, (255, 0, 0), (ball_x, ball_y), ball_radius, 0)
-        pygame.draw.line(screen, (0,255, 0), [paddle_x, paddle_y_top], [paddle_x, paddle_y_bottom], 10)
+        paddle_1()
         pygame.display.update()
         clock.tick(60)
 
         ball_x += ball_mvmnt_x
         ball_y += ball_mvmnt_y
+
         if ball_x + ball_radius > arena_width:
             ball_mvmnt_x = -ball_mvmnt_x
         if ball_y + ball_radius > arena_height:
             ball_mvmnt_y = -ball_mvmnt_y
-        if ball_x - ball_radius < 0:
-            you_lose()
-            break
+        if ball_x == paddle_x and ball_y - ball_radius>= paddle_y_bottom and ball_y - ball_radius <= paddle_y_top :
+            ball_mvmnt_x = -ball_mvmnt_x 
         if ball_y - ball_radius < 0:
             ball_mvmnt_y = -ball_mvmnt_y
+        if ball_x - ball_radius < 0: 
+            if  ball_y <= paddle_y_top and ball_y >= paddle_y_bottom:
+                ball_mvmnt_x = -ball_mvmnt_x
+            #define middle and then adjust y mvmnt based on middle  
+            else:
+                you_lose()
+                break
+        # if ball_x - ball_radius == paddle_x and ball_y <= paddle_y_top and ball_y >= paddle_y_bottom:
+        #      ball_mvmnt_x = -ball_mvmnt_x
+        # elif ball_x - ball_radius < 0 and ball_y > paddle_y_top and ball_y < paddle_y_bottom :
+        #     you_lose()
+        #     break
         
 
 pygame.quit()
