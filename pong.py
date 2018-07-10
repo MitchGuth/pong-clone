@@ -67,8 +67,8 @@ def game():
         
         ball_x += ball_mvmnt_x
         ball_y += ball_mvmnt_y
-        paddle_top = range(paddle_y_top, paddle_y_top + 30)
-        paddle_bottom = range(paddle_y_bottom, paddle_y_bottom - 30)
+        paddle_top = range(paddle_y_top, paddle_y_top + 20)
+        paddle_bottom = range(paddle_y_bottom, paddle_y_bottom - 20)
 
         if ball_x + ball_radius > arena_width:
             ball_mvmnt_x = -ball_mvmnt_x
@@ -81,8 +81,13 @@ def game():
         if ball_x - ball_radius < 0: 
             if  ball_y <= paddle_y_bottom and ball_y >= paddle_y_top:
                 if ball_y not in paddle_top and ball_y not in paddle_bottom:
-                    ball_mvmnt_y += random.randint(1, 7)
-                    ball_mvmnt_x = -ball_mvmnt_x
+                    options = random.randint(1, 2)
+                    if options == 1:
+                        ball_mvmnt_y += random.randint(1, 7)
+                        ball_mvmnt_x = -ball_mvmnt_x
+                    else:
+                        ball_mvmnt_y -= random.randint(1, 7)
+                        ball_mvmnt_x = -ball_mvmnt_x
                 else:
                     ball_mvmnt_x = -ball_mvmnt_x
             #define middle and then adjust y mvmnt based on middle of paddle
