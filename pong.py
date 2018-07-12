@@ -19,17 +19,7 @@ clock = pygame.time.Clock()
 #process input
 #update/render
 #draw
-ball_x = 400
-ball_y = 300
-ball_radius = 20
-ball_mvmnt_x = 0
-ball_mvmnt_y = 0
-paddle_x = 1
-paddle2_x = 794
-paddle_y_top = 260
-paddle_y_bottom = 340
-paddle2_y_top = 260
-paddle2_y_bottom = 340
+
 
 
 def paddle_1():
@@ -38,37 +28,86 @@ def paddle_1():
 def paddle_2():
     pygame.draw.line(screen, BLUE, [paddle2_x, paddle2_y_top], [paddle2_x, paddle2_y_bottom], 10)
 
-def score():
-    pass
+font_name = pygame.font.match_font('arial')
 
-tipoff = random.randint(1, 6)
-if tipoff == 1:
-    ball_mvmnt_x += 10
-    ball_mvmnt_y += 10
-elif tipoff == 2:
-    ball_mvmnt_x += ball_mvmnt_x - 10
-    ball_mvmnt_y += ball_mvmnt_y - 10
-elif tipoff == 3:
-    ball_mvmnt_x += 10
-elif tipoff == 4: 
-    ball_mvmnt_x += ball_mvmnt_x - 10
-elif tipoff == 5: 
-    ball_mvmnt_x += 10
-    ball_mvmnt_y += ball_mvmnt_y - 10
-elif tipoff == 6:
-    ball_mvmnt_x += ball_mvmnt_x - 10
-    ball_mvmnt_y += 10
+def draw_text(surf, text, size, x, y):
+    font = pygame.font.Font(font_name, size)
+    text_surf = font.render(text, True, WHITE)
+    text_rect = text_surf.get_rect()
+    text_rect.midtop = (x, y)
+    surf.blit(text_surf, text_rect)
+
+def show_go_screen():
+    draw_text(screen, "Apple Tennis!", 64, WIDTH / 2, HEIGHT / 4)
+    draw_text(screen, "P1(green): Q:up A:down P2(blue): Up:up Down:down ", 22, WIDTH / 2, HEIGHT / 2)
+    draw_text(screen, "Press any key to begin game. ", 18, WIDTH /2, HEIGHT * 3/4)
+    pygame.display.update()
+    waiting = True
+    while waiting: 
+        clock.tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYUP:
+                # ball_x = 400
+                # ball_y = 300
+                waiting = False
+                
+
+def ball():
+    screen.fill((0, 0, 0))
+    pygame.draw.circle(screen, RED, (ball_x, ball_y), ball_radius, 0)
+    
+
+# def score_player1():
+#     pass
+# def score_player2():
+#     pass
+
+
+
+game_over = True    
 #gameloop
 while not done:
+    if game_over:
+        show_go_screen()
+        game_over = False
+        ball_x = 400
+        ball_y = 300
+        ball_radius = 20
+        ball_mvmnt_x = 0
+        ball_mvmnt_y = 0
+        paddle_x = 1
+        paddle2_x = 794
+        paddle_y_top = 260
+        paddle_y_bottom = 340
+        paddle2_y_top = 260
+        paddle2_y_bottom = 340
+
+        tipoff = random.randint(1, 6)
+        if tipoff == 1:
+            ball_mvmnt_x += 10
+            ball_mvmnt_y += 10
+        elif tipoff == 2:
+            ball_mvmnt_x += ball_mvmnt_x - 10
+            ball_mvmnt_y += ball_mvmnt_y - 10
+        elif tipoff == 3:
+            ball_mvmnt_x += 10
+        elif tipoff == 4: 
+            ball_mvmnt_x += ball_mvmnt_x - 10
+        elif tipoff == 5: 
+            ball_mvmnt_x += 10
+            ball_mvmnt_y += ball_mvmnt_y - 10
+        elif tipoff == 6:
+            ball_mvmnt_x += ball_mvmnt_x - 10
+            ball_mvmnt_y += 10
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-
-    screen.fill((0, 0, 0))
-    pygame.draw.circle(screen, RED, (ball_x, ball_y), ball_radius, 0)
+    ball()
     paddle_1()
     paddle_2()
-    pygame.display.update()
     clock.tick(60)
 
 
@@ -92,12 +131,14 @@ while not done:
     
     ball_x += ball_mvmnt_x
     ball_y += ball_mvmnt_y
+
     paddle_top = range(paddle_y_top, paddle_y_top + 20)
     paddle_bottom = range(paddle_y_bottom, paddle_y_bottom - 20)
     paddle2_top = range(paddle2_y_top, paddle2_y_top + 20)
     paddle2_bottom = range(paddle2_y_bottom, paddle2_y_bottom -20)
-    #paddle2 logic
-    if ball_x + ball_radius == WIDTH:
+    
+    #right wall logic
+    if ball_x + ball_radius == WIDTH +20 :
         if ball_y <= paddle2_y_bottom and ball_y >= paddle2_y_top:
             if ball_y not in paddle2_top and ball_y not in paddle2_bottom:
                 options = random.randint(1, 2)
@@ -109,7 +150,9 @@ while not done:
                     ball_mvmnt_x = -ball_mvmnt_x
             else: 
                 ball_mvmnt_x = -ball_mvmnt_x
-        ball_mvmnt_x = -ball_mvmnt_x
+        else:
+            game_over = True
+                
     #floor logic
     if ball_y + ball_radius > HEIGHT:
         ball_mvmnt_y = -ball_mvmnt_y
@@ -120,7 +163,8 @@ while not done:
     # if ball_x == paddle_x and ball_y >= paddle_y_top and ball_y <= paddle_y_bottom :
     #     ball_mvmnt_x = -ball_mvmnt_x 
     
-    if ball_x - ball_radius == 0: 
+    #left wall logic
+    if ball_x - ball_radius == -20: 
         if  ball_y <= paddle_y_bottom and ball_y >= paddle_y_top:
             if ball_y not in paddle_top and ball_y not in paddle_bottom:
                 options = random.randint(1, 2)
@@ -134,9 +178,10 @@ while not done:
                 ball_mvmnt_x = -ball_mvmnt_x
         
         else:
-            score()
+            game_over = True
                 
-        
+    pygame.display.update()
+
 pygame.quit()
 
 
