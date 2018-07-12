@@ -1,7 +1,6 @@
 import pygame
 import random
 
-
 WIDTH = 800
 HEIGHT = 600
 #define colors
@@ -10,17 +9,12 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
-
 #initialize window
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH,HEIGHT))
 done = False
 clock = pygame.time.Clock()
-#process input
-#update/render
-#draw
-
 
 def paddle_1():
     pygame.draw.line(screen, GREEN, [paddle_x, paddle_y_top], [paddle_x, paddle_y_bottom], 10)
@@ -51,19 +45,10 @@ def show_go_screen():
             if event.type == pygame.KEYUP:
                 waiting = False
                 
-
 def ball():
     screen.fill((0, 0, 0))
     pygame.draw.circle(screen, RED, (ball_x, ball_y), ball_radius, 0)
     
-
-# def score_player1():
-#     pass
-# def score_player2():
-#     pass
-
-
-
 game_over = True    
 #gameloop
 while not done:
@@ -108,7 +93,6 @@ while not done:
     paddle_2()
     clock.tick(60)
 
-
     pressed = pygame.key.get_pressed()
     if pressed[pygame.K_UP]:
         if paddle2_y_top > 0:
@@ -133,8 +117,7 @@ while not done:
     paddle_top = range(paddle_y_top, paddle_y_top + 1)
     paddle_bottom = range(paddle_y_bottom, paddle_y_bottom - 1)
     paddle2_top = range(paddle2_y_top, paddle2_y_top + 1)
-    paddle2_bottom = range(paddle2_y_bottom, paddle2_y_bottom -1)
-    
+    paddle2_bottom = range(paddle2_y_bottom, paddle2_y_bottom -1)  
     #right wall logic
     if ball_x + ball_radius == WIDTH +20 :
         if ball_y <= paddle2_y_bottom and ball_y >= paddle2_y_top:
@@ -149,18 +132,13 @@ while not done:
             else: 
                 ball_mvmnt_x = -ball_mvmnt_x
         else:
-            game_over = True
-                
+            game_over = True             
     #floor logic
     if ball_y + ball_radius > HEIGHT:
         ball_mvmnt_y = -ball_mvmnt_y
     #ceiling logic
     if ball_y - ball_radius < 0:
-        ball_mvmnt_y = -ball_mvmnt_y
-    
-    # if ball_x == paddle_x and ball_y >= paddle_y_top and ball_y <= paddle_y_bottom :
-    #     ball_mvmnt_x = -ball_mvmnt_x 
-    
+        ball_mvmnt_y = -ball_mvmnt_y    
     #left wall logic
     if ball_x - ball_radius == -20: 
         if  ball_y <= paddle_y_bottom and ball_y >= paddle_y_top:
@@ -183,5 +161,3 @@ while not done:
 pygame.quit()
 
 
-# need to create if/else logic to apply the paddle top and bottom 
-# so that I can change the trejectory of a ball that is straight east west moving.
