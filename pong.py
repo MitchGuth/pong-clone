@@ -1,6 +1,7 @@
 import pygame
 import random
 
+
 WIDTH = 800
 HEIGHT = 600
 #define colors
@@ -19,7 +20,6 @@ clock = pygame.time.Clock()
 #process input
 #update/render
 #draw
-
 
 
 def paddle_1():
@@ -49,8 +49,6 @@ def show_go_screen():
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.KEYUP:
-                # ball_x = 400
-                # ball_y = 300
                 waiting = False
                 
 
@@ -132,10 +130,10 @@ while not done:
     ball_x += ball_mvmnt_x
     ball_y += ball_mvmnt_y
 
-    paddle_top = range(paddle_y_top, paddle_y_top + 20)
-    paddle_bottom = range(paddle_y_bottom, paddle_y_bottom - 20)
-    paddle2_top = range(paddle2_y_top, paddle2_y_top + 20)
-    paddle2_bottom = range(paddle2_y_bottom, paddle2_y_bottom -20)
+    paddle_top = range(paddle_y_top, paddle_y_top + 1)
+    paddle_bottom = range(paddle_y_bottom, paddle_y_bottom - 1)
+    paddle2_top = range(paddle2_y_top, paddle2_y_top + 1)
+    paddle2_bottom = range(paddle2_y_bottom, paddle2_y_bottom -1)
     
     #right wall logic
     if ball_x + ball_radius == WIDTH +20 :
@@ -179,7 +177,7 @@ while not done:
         
         else:
             game_over = True
-                
+              
     pygame.display.update()
 
 pygame.quit()
